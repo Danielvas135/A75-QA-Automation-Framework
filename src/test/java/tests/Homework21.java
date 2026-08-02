@@ -10,12 +10,12 @@ public class Homework21 extends BaseTest {
     @Test
     public void createRenameDeletePlaylist() {
         // Login
-        HomePage home = new LoginPage(driver)
+        HomePage home = new LoginPage(getDriver())
                 .loginAs("daniel.vasquez@testpro.io", "Makatey135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should be loaded");
 
-        // Use unique name to avoid collisions
+        // Use unique name to avoid bugs
         String base = "HW23_Playlist";
         String ts = String.valueOf(System.currentTimeMillis() / 1000);
         String name = base + "_" + ts;

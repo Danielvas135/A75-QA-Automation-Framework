@@ -7,7 +7,7 @@ public class Homework24 extends BaseTest {
 
     @Test
     public void testGridChrome() {
-        String title = driver.getTitle();
+        String title = getDriver().getTitle();
         System.out.println("Page title from Grid: " + title);
 
         Assert.assertTrue(title.length() > 0, "Title should not be empty");

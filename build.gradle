@@ -24,6 +24,6 @@ configurations.all {
 
 test {
     useTestNG() {
-        suites "src/test/resources/Homework21POM.xml"
+        suites "src/test/resources/TestNG.xml"
     }
 }
