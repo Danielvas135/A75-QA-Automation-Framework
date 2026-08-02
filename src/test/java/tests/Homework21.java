@@ -11,7 +11,7 @@ public class Homework21 extends BaseTest {
     public void createRenameDeletePlaylist() {
         // Login
         HomePage home = new LoginPage(driver)
-                .loginAs("daniel.vasquez@testpro.io", "Redgrave135!");
+                .loginAs("daniel.vasquez@testpro.io", "Makatey135!");
 
         Assert.assertTrue(home.isLoaded(), "Home should be loaded");
 
