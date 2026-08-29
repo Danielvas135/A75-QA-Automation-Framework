@@ -4,6 +4,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.*;
 
@@ -35,18 +39,37 @@ public class BaseTest {
     }
 
     public WebDriver pickBrowser(String browser) throws MalformedURLException {
+        String gridURL = "http://localhost:4444"; // change if your Grid is on another machine
+
         switch (browser.toLowerCase()) {
-            case "chrome":
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--remote-allow-origins=*");
-                return new ChromeDriver(options);
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                return new FirefoxDriver();
+
+            case "edge":
+                WebDriverManager.edgedriver().setup();
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.addArguments("--remote-allow-origins=*");
+                return new EdgeDriver(edgeOptions);
+
+            case "grid-firefox":
+                return new RemoteWebDriver(new URL(gridURL), new FirefoxOptions());
+
+            case "grid-chrome":
+                return new RemoteWebDriver(new URL(gridURL), new ChromeOptions());
+
+            case "grid-edge":
+                return new RemoteWebDriver(new URL(gridURL), new EdgeOptions());
 
             case "cloud":
                 return cloudBrowserSetup();
 
+            case "chrome":
             default:
-                return cloudBrowserSetup(); // default to cloud for this homework
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--remote-allow-origins=*");
+                return new ChromeDriver(chromeOptions);
         }
     }
 
