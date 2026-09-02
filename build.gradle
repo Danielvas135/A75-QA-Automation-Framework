@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group = 'org.example'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -13,6 +13,9 @@ dependencies {
     testImplementation 'org.testng:testng:7.10.2'
     testImplementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+
+    testImplementation 'io.cucumber:cucumber-java:7.18.1'
+    testImplementation 'io.cucumber:cucumber-testng:7.18.1'
 }
 
 configurations.all {
@@ -21,9 +24,11 @@ configurations.all {
     }
 }
 
+def suiteName = project.findProperty('suite') ?: 'TestNG'
 
 test {
     useTestNG() {
-        suites "src/test/resources/${suite}.xml"
+        suites "src/test/resources/${suiteName}.xml"
     }
+    systemProperty 'browser', project.findProperty('browser') ?: System.getProperty('browser', 'chrome')
 }
