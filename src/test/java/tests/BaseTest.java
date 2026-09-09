@@ -4,12 +4,15 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,15 +22,14 @@ public class BaseTest {
 
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    private final String LT_USERNAME = "danielvas135";
-    private final String LT_ACCESS_KEY = "LT_wrMi8ffiNwlALbgmbqE7uTsfYyOvTwkD5UMvV6PBQAT3ifF";
+    private final String LT_USERNAME = System.getenv("LT_USERNAME");
+    private final String LT_ACCESS_KEY = System.getenv("LT_ACCESS_KEY");
 
     @Parameters("Url")
     @BeforeMethod(alwaysRun = true)
     public void setUp(@Optional("https://qa.koel.app/") String baseUrl) throws MalformedURLException {
-
-        // Read browser from command line: -Dbrowser=cloud
-        String browser = System.getProperty("browser", "cloud");
+        // Default is local Chrome. Override with -Dbrowser=firefox|grid-chrome|cloud
+        String browser = System.getProperty("browser", "chrome");
 
         driver.set(pickBrowser(browser));
         getDriver().manage().window().maximize();
@@ -39,7 +41,7 @@ public class BaseTest {
     }
 
     public WebDriver pickBrowser(String browser) throws MalformedURLException {
-        String gridURL = "http://localhost:4444"; // change if your Grid is on another machine
+        String gridUrl = "http://localhost:4444";
 
         switch (browser.toLowerCase()) {
             case "firefox":
@@ -53,13 +55,13 @@ public class BaseTest {
                 return new EdgeDriver(edgeOptions);
 
             case "grid-firefox":
-                return new RemoteWebDriver(new URL(gridURL), new FirefoxOptions());
+                return new RemoteWebDriver(new URL(gridUrl), new FirefoxOptions());
 
             case "grid-chrome":
-                return new RemoteWebDriver(new URL(gridURL), new ChromeOptions());
+                return new RemoteWebDriver(new URL(gridUrl), new ChromeOptions());
 
             case "grid-edge":
-                return new RemoteWebDriver(new URL(gridURL), new EdgeOptions());
+                return new RemoteWebDriver(new URL(gridUrl), new EdgeOptions());
 
             case "cloud":
                 return cloudBrowserSetup();
@@ -69,6 +71,7 @@ public class BaseTest {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--remote-allow-origins=*");
+                chromeOptions.addArguments("--disable-notifications");
                 return new ChromeDriver(chromeOptions);
         }
     }
@@ -76,21 +79,19 @@ public class BaseTest {
     public WebDriver cloudBrowserSetup() throws MalformedURLException {
         ChromeOptions browserOptions = new ChromeOptions();
         browserOptions.setPlatformName("Windows 10");
-        browserOptions.setBrowserVersion("dev");
+        browserOptions.setBrowserVersion("latest");
 
         HashMap<String, Object> ltOptions = new HashMap<>();
         ltOptions.put("username", LT_USERNAME);
         ltOptions.put("accessKey", LT_ACCESS_KEY);
-        ltOptions.put("project", "A75 Homework 25");
-        ltOptions.put("build", "Parallel Testing");
+        ltOptions.put("project", "Koel Automation");
+        ltOptions.put("build", "Regression");
         ltOptions.put("name", this.getClass().getSimpleName());
-        ltOptions.put("selenium_version", "4.0.0");
         ltOptions.put("w3c", true);
-
         browserOptions.setCapability("LT:Options", ltOptions);
 
-        String hubURL = "https://" + LT_USERNAME + ":" + LT_ACCESS_KEY + "@hub.lambdatest.com/wd/hub";
-        return new RemoteWebDriver(new URL(hubURL), browserOptions);
+        String hubUrl = "https://" + LT_USERNAME + ":" + LT_ACCESS_KEY + "@hub.lambdatest.com/wd/hub";
+        return new RemoteWebDriver(new URL(hubUrl), browserOptions);
     }
 
     @AfterMethod(alwaysRun = true)

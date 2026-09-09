@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Regression">
+    <parameter name="Url" value="https://qa.koel.app/"/>
+    <test name="Regression Tests">
+        <classes>
+            <class name="tests.LoginTests"/>
+            <class name="tests.PlaylistTests"/>
+            <class name="tests.ProfileTests"/>
+        </classes>
+    </test>
+</suite>

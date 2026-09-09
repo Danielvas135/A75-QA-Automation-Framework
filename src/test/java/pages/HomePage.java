@@ -40,7 +40,6 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    // ---- sanity check for tests ----
     public boolean isLoaded() {
         try {
             waitVisible(allSongsLink);
@@ -52,7 +51,6 @@ public class HomePage extends BasePage {
 
     // ================== CORE ACTIONS ==================
 
-    /** Create playlist with given name (no assertions, just does it). */
     public void createPlaylist(String name) {
         safeClick(sidebarPlaylistBtn);
         safeClick(sidebarCreateBtn);
@@ -61,7 +59,6 @@ public class HomePage extends BasePage {
         shortPause();
     }
 
-    /** Rename playlist: oldName -> newName (no assertions). */
     public void renamePlaylist(String oldName, String newName) {
         WebElement item = waitVisible(playlistByName(oldName));
 
@@ -79,7 +76,6 @@ public class HomePage extends BasePage {
         shortPause();
     }
 
-    /** Delete playlist by name if it exists (best effort). */
     public void deletePlaylist(String name) {
         List<WebElement> list = driver.findElements(playlistByName(name));
         if (list.isEmpty()) {
@@ -91,7 +87,6 @@ public class HomePage extends BasePage {
 
         safeClick(deletePlaylistBtn);
 
-        // try confirm if dialog appears; swallow if not
         try {
             safeClick(okBtn);
         } catch (Exception ignored) {
@@ -102,12 +97,10 @@ public class HomePage extends BasePage {
 
     // ================== SMALL HELPERS ==================
 
-    /** Simple existence check used only at the very end of the test. */
     public boolean playlistExists(String name) {
         return !driver.findElements(playlistByName(name)).isEmpty();
     }
 
-    /** For debugging: print all playlist names. */
     public List<String> listPlaylists() {
         List<String> out = new ArrayList<>();
         for (WebElement el : driver.findElements(ALL_PLAYLIST_ITEMS)) {

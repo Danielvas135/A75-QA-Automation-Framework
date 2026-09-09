@@ -17,7 +17,7 @@ public class BasePage {
     protected BasePage(WebDriver driver) {
         this.driver = driver;
         // 5 seconds is usually enough. You can still increase it later if needed.
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
     }
 

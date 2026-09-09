@@ -16,26 +16,27 @@ public class LoginPage extends BasePage {
     private WebElement submitBtn;
 
     public LoginPage(WebDriver driver) {
-        super(driver); // BasePage calls PageFactory.initElements(driver, this)
+        super(driver);
     }
 
-    // non-fluent
-    public void provideEmail(String email)   { type(emailInput, email); }
-    public void providePassword(String pass) { type(passwordInput, pass); }
-    public void clickSubmitBtn()             { safeClick(submitBtn); }
+    public void provideEmail(String email) {
+        type(emailInput, email);
+    }
 
-    // convenience: do the login and return HomePage when loaded
-    public HomePage loginAs(String email, String pass) {
+    public void providePassword(String password) {
+        type(passwordInput, password);
+    }
+
+    public void clickSubmit() {
+        safeClick(submitBtn);
+    }
+
+    public HomePage loginAs(String email, String password) {
         provideEmail(email);
-        providePassword(pass);
-        clickSubmitBtn();
+        providePassword(password);
+        clickSubmit();
         HomePage home = new HomePage(driver);
-        home.isLoaded();  // blocks until a home-unique element is visible
+        home.isLoaded();
         return home;
     }
-
-    // optional fluent style
-    public LoginPage withEmail(String email){ type(emailInput, email); return this; }
-    public LoginPage withPassword(String p){ type(passwordInput, p); return this; }
-    public HomePage submitExpectHome(){ safeClick(submitBtn); HomePage h=new HomePage(driver); h.isLoaded(); return h; }
 }

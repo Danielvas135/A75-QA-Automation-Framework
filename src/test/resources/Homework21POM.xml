@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Homework21POM">
-    <test name="POM Tests">
-        <parameter name="Url" value="https://qa.koel.app/"/>
-        <classes>
-            <class name="tests.Homework21"/>
-        </classes>
-    </test>
-</suite>
