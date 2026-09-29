@@ -10,7 +10,7 @@ public class LoginTests extends BaseTest {
     @Test
     public void validLogin() {
         HomePage home = new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "Makatey135!");
+                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
         Assert.assertTrue(home.isLoaded(), "Home should load after valid login");
     }
 
