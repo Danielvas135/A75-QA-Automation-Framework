@@ -13,7 +13,7 @@ public class ProfileTests extends BaseTest {
     @Test
     public void changeThemeToPines() {
         new LoginPage(getDriver())
-                .loginAs("daniel.vasquez@testpro.io", "Makatey135!");
+                .loginAs("daniel.vasquez@testpro.io", "KoelTest123!");
 
         WebDriverWait wait = new WebDriverWait(getDriver(), Duration.ofSeconds(15));
         wait.until(ExpectedConditions.elementToBeClickable(
